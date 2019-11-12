@@ -1,0 +1,34 @@
+﻿@model List<Producto>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script src="https://kit.fontawesome.com/fae805ac08.js" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    let IDs = [];
+</script>
+<h1>Productos ordenados por Nombre</h1>
+<div class="row">
+    @{
+        foreach (var producto in Model)
+        {
+            <div class="card" style="width: 18rem;">
+                <img src=@producto.Imagen class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">@producto.Nombre <i class="fa fa-heart-o" aria-hidden="true"></i></h5>
+                    <p class="card-text">@producto.Descripcion</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Precio: @producto.Precio €</li>
+                    <li class="list-group-item">Tipo: @producto.Tipo</li>
+                    <li class="list-group-item">Fecha de caducidad: @producto.FechaCaducidad</li>
+                </ul>
+            </div>
+            <script type="text/javascript">
+                    IDs.push(@producto.Id);
+            </script>
+        }
+    }
+</div>
+
+

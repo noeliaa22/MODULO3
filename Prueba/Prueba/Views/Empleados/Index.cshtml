@@ -1,0 +1,32 @@
+﻿@model List<Empleado>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table table-responsive-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th>Id </th>
+            <th>Nombre </th>
+            <th>Apellido </th>
+            <th>FechaNacimiento </th>
+            <th>Imagen </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var trabajador in Model)
+            {
+                <tr>
+                    <td>@trabajador.Id </td>
+                    <td>@trabajador.Nombre </td>
+                    <td>@trabajador.Apellido </td>
+                    <td>@trabajador.FechaNacimiento </td>
+                    <td> <img src="@trabajador.Imagen"; class="imagen" /></td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

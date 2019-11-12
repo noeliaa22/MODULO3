@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    string nombre = "Noelia";
+    string saludo = "Hola";
+    List<string> compra = new List<string> {"Puerros","Calabacin","Manzanas","Cereales","Aceite"};
+    compra.Add("Yogures");
+}
+
+<div class="text-center">
+    <h1 class="display-4">@saludo @nombre</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <ul>
+        @foreach (string element in compra)
+        {
+            <li>@element</li>
+        }
+        <!--Tambien se puede hacer con arroba{}, tambien se puede utilizar la variable "var" en vez de string o cualquier otra-->
+
+    </ul>
+</div>
