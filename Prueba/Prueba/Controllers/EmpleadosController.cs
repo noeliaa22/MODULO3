@@ -9,8 +9,6 @@ namespace Prueba.Controllers
 {
     public class EmpleadosController : Controller
     {
-        public IActionResult Index()
-        {
             List<Empleado> trabajadores = new List<Empleado>
             {
                 new Empleado{
@@ -58,6 +56,21 @@ namespace Prueba.Controllers
                 }
 
             };
+        public IActionResult Index(string nombre)
+        {
+            if (String.IsNullOrEmpty(nombre))
+            {
+                return View(trabajadores);
+
+            }
+            else
+            {
+
+            trabajadores = trabajadores.Where(x => x.Nombre.ToLower().Contains(nombre.ToLower())).ToList();
+
+            return View(trabajadores);
+            }  
+            
             //Ordena los empleados por apellido
             //trabajadores.OrderBy(empleado => empleado.Apellido).ToList()
             //Saca la lista de empleados cuyo nombre contenga la l.
@@ -65,11 +78,11 @@ namespace Prueba.Controllers
             //Saca la lista de empleados donde la primera letra del nombre es C.
             //x => x.Nombre.Substring(0,1).Contains("C"))
             //x => x.Nombre.Substring(0,1)=="C").ToList()
-            Empleado empleado= trabajadores.FirstOrDefault(x => x.Nombre.Substring(0, 1) == "C");
-            return View(trabajadores.Where(x => x.Nombre.Substring(0, 1) == "C" && x.Nombre.Substring(1,1)=="o").OrderBy(empleado => empleado.Apellido).ToList());
+            //Empleado empleado= trabajadores.FirstOrDefault(x => x.Nombre.Substring(0, 1) == "C");
+            //return View(trabajadores.Where(x => x.Nombre.Substring(0, 1) == "C" && x.Nombre.Substring(1,1)=="o").OrderBy(empleado => empleado.Apellido).ToList());
         }
 
-        public IActionResult Detalle()
+        public IActionResult Detalle()  
         {
             Empleado empleado = new Empleado
             {

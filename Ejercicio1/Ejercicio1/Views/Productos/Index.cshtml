@@ -1,16 +1,49 @@
 ﻿@model List<Producto>
 @{
     ViewData["Title"] = "Index";
+
+    //ASI SE HACE UN CASTEO, es decir, se convierte el view data a una lista tipo producto: dos formas!
+    //List<Producto> productos = ViewData["productos"] as List<Producto>;
+    //List<Producto> productos = (List<Producto>)ViewData["productos"] as List<Producto>;
+    //string nombre = ViewBag.Nombre as string;
+    string mensaje = ViewBag.mensaje as string;
+    List<string> tipos = ViewData["tipos"] as List<string>;
 }
 
 <script src="https://kit.fontawesome.com/fae805ac08.js" crossorigin="anonymous"></script>
 <script type="text/javascript">
     let IDs = [];
 </script>
+
+
 <h1>Productos ordenados por Nombre</h1>
+<form asp-controller="Productos" asp-action="Index">
+    <input type="text" placeholder="Nombre" name="nombre" />
+    @*<input type="submit" value="Buscar" />*@
+
+    <select name="tipo" id="selectTipo">
+        <option value="">Todos</option>
+        @{
+            foreach (var tipo in tipos)
+            {
+                <option value="@tipo">@tipo</option>
+            };
+        }
+    </select>
+    <input type="submit" value="Buscar" />
+</form>
+@if (Model.Count == 0)
+{
+    <h3>Ningún resultado</h3>
+}
+@{
+    else
+    {
+
 <div class="row">
-    @{
-        foreach (var producto in Model)
+
+  
+        @foreach (var producto in Model)
         {
             <div class="card" style="width: 18rem;">
                 <img src=@producto.Imagen class="card-img-top" alt="">
@@ -28,7 +61,8 @@
                     IDs.push(@producto.Id);
             </script>
         }
-    }
-</div>
 
+</div>
+        }
+    }
 

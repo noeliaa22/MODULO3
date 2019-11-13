@@ -3,6 +3,11 @@
     ViewData["Title"] = "Index";
 }
 
+    <form asp-controller="Empleados" asp-action="Index">
+        <input type="text" placeholder="Nombre" name="nombre"/>
+        <input type="submit" value="Buscar"/>
+    </form>
+
 <table class="table table-responsive-sm">
     <thead class="thead-dark">
         <tr>
