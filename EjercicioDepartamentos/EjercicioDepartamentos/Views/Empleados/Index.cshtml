@@ -1,0 +1,80 @@
+﻿@model IEnumerable<EjercicioDepartamentos.Models.Empleado>
+
+@{
+    ViewData["Title"] = "Index";
+    List<string> departamentos = ViewData["departamentos"] as List<string>;
+}
+
+
+@*<script type="text/javascript">
+    let departamento = [];
+</script>*@
+
+<h1>PLANTILLA</h1>
+
+<p>
+    <a asp-action="Create">Añadir empleado</a>
+</p>
+
+
+<form asp-controller="Empleados" asp-action="Index">
+
+    <input type="text" placeholder="Nombre del empleado" name="nombre" />
+    <select name="departamento" id="selectTipo">
+        <option value="">Todos</option>
+        @{
+            foreach (string departamento in departamentos)
+            {
+                <option value="@departamento">@departamento</option>
+            };
+        }
+    </select>
+
+    <input type="submit" value="Buscar" />
+</form>
+
+@*@if (Model.Count == 0)
+{
+    <h3>Ningún resultado</h3>
+}
+@{
+    else
+    {*@
+
+        <div class="container">
+
+            @foreach (Empleado empleado in Model)
+            {
+                @*<script type="text/javascript">
+        departamento.push('@empleado.Departamento.Nombre');
+                </script>*@
+
+                <div class="card" style="width: 18rem;">
+                    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample-@empleado.Id" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <img src="@empleado.Imagen" class="card-img-top rounded-circle imagenEmpleado" alt="@empleado.Nombre @empleado.Apellido">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">@empleado.Nombre @empleado.Apellido</h5>
+                    </div>
+                    <ul class="list-group list-group-flush informacion">
+                        <li class="list-group-item">Teléfono: @empleado.Telefono</li>
+                        <li class="list-group-item">Empresa: @empleado.Departamento.Empresa.Nombre</li>
+                        <div class="collapse" id="collapseExample-@empleado.Id">
+                            <div class="card card-body">
+                                <li class="list-group-item">Departamento: @empleado.Departamento.Nombre</li>
+                            </div>
+                        </div>
+                    </ul>
+                    <div class="card-body">
+                        <a asp-action="Edit" asp-route-id="@empleado.Id" class="card-link">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@empleado.Id" class="card-link">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@empleado.Id" class="card-link">Delete</a>
+                    </div>
+                </div>
+
+
+            }
+        </div>
+    @*}*@
+
+
