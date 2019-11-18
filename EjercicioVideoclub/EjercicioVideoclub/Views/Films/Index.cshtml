@@ -1,0 +1,109 @@
+﻿@model List<EjercicioVideoclub.Models.Film>
+
+@{
+    ViewData["Title"] = "Index";
+     List<string> generos = ViewData["generos"] as List<string>;
+}
+
+<h1>Peliculas</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="Films" asp-action="Index">
+
+    <input type="text" placeholder="Título" name="titulo" />
+    <select name="genero" id="selectTipo">
+        <option value="">Todos</option>
+        @{
+            foreach (string genero in generos)
+            {
+                <option value="@genero">@genero</option>
+            };
+        }
+    </select>
+
+    <input type="submit" value="Buscar" />
+</form>
+
+@if (Model.Count == 0)
+{
+    <h4>No hay resultados</h4>
+}
+
+<div class="row">
+
+    @foreach (Film film in Model)
+    {
+    <div class="card col-lg-2 col-md-3 col-sm-6" style="width: 10rem; margin:1%">
+        <div class="card-body">
+            <h5 class="card-title">@film.Title</h5>
+        </div>
+        <img src="@film.Image" class="card-img-top portadas" alt="@film.Title">
+
+        @if (film.Rented == "Disponible")
+        {
+            <div class="card-body">
+                <a asp-controller="Films" asp-action="Alquiler" asp-route-id="@film.Id" class="btn btn-primary">Alquilar</a>
+            </div>
+
+        }
+        else
+        {
+            <div class="card-body">
+            </div>
+        }
+    </div>
+    }
+
+</div>
+
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Título
+            </th>
+            <th>
+               Synopsis
+            </th>
+            <th>
+                Genero
+            </th>
+            <th>
+                Portada
+            </th>
+            <th>
+                Estado
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (Film film in Model) {
+        <tr>
+            <td>
+                @film.Title
+            </td>
+            <td>
+                @film.Synopsis
+            </td>
+            <td>
+                @film.Genre
+            </td>
+            <td>
+                <img class="portadas" src="@film.Image" />
+            </td>
+            <td>
+                @film.Rented
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@film.Id">Edit</a> 
+                <a asp-action="Details" asp-route-id="@film.Id">Details</a> 
+                <a asp-action="Delete" asp-route-id="@film.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>*@

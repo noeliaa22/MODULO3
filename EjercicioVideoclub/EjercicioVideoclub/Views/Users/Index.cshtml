@@ -1,0 +1,164 @@
+﻿@model IEnumerable<EjercicioVideoclub.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+    List<UserFilm> pelis = ViewData["pelis"] as List<UserFilm>;
+}
+
+<h1>Mis alquileres</h1>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+
+@if (pelis.Count == 0)
+{
+    <h3>No tienes ningún alquiler</h3>
+}
+
+
+<form asp-controller="Users" asp-action="Index">
+
+    <select name="fecha" id="selectTipo">
+        <option value="">Todos</option>
+        <option value="vigentes">Vigentes</option>
+        <option value="pasados">Pasados</option>
+
+    </select>
+    <input type="submit" value="Filtrar" />
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Películas Alquiladas
+            </th>
+            <th>
+                Fecha alquiler
+            </th>
+            <th>
+                Fecha Devolución
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (User user in Model)
+        {
+            @foreach (var userFilm in pelis)
+            {
+                if (userFilm.DataRental < DateTime.Now.AddDays(-2) && userFilm.ReturnDate==null)
+                {
+                    <tr class="table-danger">
+                        <td>
+                            <ul>
+
+                                <p>@userFilm.Film.Title</p>
+
+
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                @{
+
+                                    <p>@userFilm.DataRental</p>
+
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                @{
+                                    if (userFilm.ReturnDate == null)
+                                    {
+                                        <p>Vigente</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@userFilm.ReturnDate</p>
+
+                                    }
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                @{
+                                    if (userFilm.ReturnDate == null)
+                                    {
+                                        <p> <a asp-controller="UserFilms" asp-action="Devolver" asp-route-id="@userFilm.Id">Devolver</a></p>
+                                    }
+                                    else
+                                    {
+                                        <p> &nbsp &nbsp  </p>
+                                    }
+                                }
+                            </ul>
+                        </td>
+                    </tr>
+
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <ul>
+
+                                <p>@userFilm.Film.Title</p>
+
+
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                @{
+
+                                    <p>@userFilm.DataRental</p>
+
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                @{
+                                    if (userFilm.ReturnDate == null)
+                                    {
+                                        <p>Vigente</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@userFilm.ReturnDate</p>
+
+                                    }
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                @{
+                                    if (userFilm.ReturnDate == null)
+                                    {
+                                        <p> <a asp-controller="UserFilms" asp-action="Devolver" asp-route-id="@userFilm.Id">Devolver</a></p>
+                                    }
+                                    else
+                                    {
+                                        <p> &nbsp &nbsp  </p>
+                                    }
+                                }
+                            </ul>
+                        </td>
+                    </tr>
+                }
+
+            }
+        }
+    </tbody>
+    </table>
+    @*<a asp-controller="UserFilms" asp-action="Edit" asp-route-id="@userFilm.Id">Edit |</a>
+
+        <a asp-controller="UserFilms" asp-action="Details" asp-route-id="@userFilm.Id">Details |</a>
+
+        <a asp-controller="UserFilms" asp-action="Delete" asp-route-id="@userFilm.Id">Delete</a>*@

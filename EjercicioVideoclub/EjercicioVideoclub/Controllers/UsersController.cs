@@ -5,75 +5,85 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using EntityFramework.Data;
-using EntityFramework.Models;
-using EntityFramework.Models.ViewModels;
+using EjercicioVideoclub.Models;
 
-namespace EntityFramework.Controllers
+namespace EjercicioVideoclub.Controllers
 {
-    public class ObrasController : Controller
+    public class UsersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly VideoclubContext _context;
 
-        public ObrasController(ApplicationDbContext context)
+        public UsersController(VideoclubContext context)
         {
             _context = context;
         }
 
-        // GET: Obras
-        public async Task<IActionResult> Index()
+        // GET: Users
+        public async Task<IActionResult> Index(string fecha)
         {
-            var applicationDbContext = _context.Obras.Include(o => o.Autor).Include(x=> x.ObraCategorias).ThenInclude(x=>x.Categoria);
-            return View(await applicationDbContext.ToListAsync());
+            var alquileres = await _context.Users.Where(x=>x.Id==1).Include(o => o.UserFilm).ThenInclude(x => x.Film).ToListAsync();
+
+            if (fecha=="vigentes")
+            {
+                ViewData["pelis"]= await _context.UsersFilms.Where(x=>x.User.Id==1 && x.ReturnDate==null).ToListAsync();
+              
+            }
+            else if (fecha=="pasados")
+            {
+                ViewData["pelis"]= await _context.UsersFilms.Where(x=>x.User.Id==1 && x.ReturnDate!=null).ToListAsync();
+            }
+            else
+            {
+            ViewData["pelis"]= await _context.UsersFilms.Where(x=>x.User.Id==1).ToListAsync();
+
+            }
+
+            return View(alquileres);
+           
         }
 
-        // GET: Obras/Details/5
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            
             if (id == null)
             {
                 return NotFound();
             }
 
-            var obra = await _context.Obras
-                .Include(o => o.Autor)
+            var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (obra == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(obra);
+            return View(user);
         }
 
-        // GET: Obras/Create
-        public async Task<IActionResult> Create()
+        // GET: Users/Create
+        public IActionResult Create()
         {
-            CrearObraVM covm = new CrearObraVM
-            {
-                Autores = await _context.Autores.ToListAsync(),
-            }; 
-            return View(covm);
+            return View();
         }
 
-        // POST: Obras/Create
+        // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CrearObraVM covm)
+        public async Task<IActionResult> Create([Bind("Id,Name,Lastname,Email,ProfilePicture")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(covm.Obra);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["AutorId"] = new SelectList(_context.Autores, "Id", "Id", covm.Obra.AutorId);
-            return View(covm);
+            return View(user);
         }
 
-        // GET: Obras/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,23 +91,22 @@ namespace EntityFramework.Controllers
                 return NotFound();
             }
 
-            var obra = await _context.Obras.FindAsync(id);
-            if (obra == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            ViewData["AutorId"] = new SelectList(_context.Autores, "Id", "Id", obra.AutorId);
-            return View(obra);
+            return View(user);
         }
 
-        // POST: Obras/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,AnioPublicacion,AutorId")] Obra obra)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Lastname,Email,ProfilePicture")] User user)
         {
-            if (id != obra.Id)
+            if (id != user.Id)
             {
                 return NotFound();
             }
@@ -106,12 +115,12 @@ namespace EntityFramework.Controllers
             {
                 try
                 {
-                    _context.Update(obra);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ObraExists(obra.Id))
+                    if (!UserExists(user.Id))
                     {
                         return NotFound();
                     }
@@ -122,11 +131,10 @@ namespace EntityFramework.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AutorId"] = new SelectList(_context.Autores, "Id", "Id", obra.AutorId);
-            return View(obra);
+            return View(user);
         }
 
-        // GET: Obras/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,31 +142,30 @@ namespace EntityFramework.Controllers
                 return NotFound();
             }
 
-            var obra = await _context.Obras
-                .Include(o => o.Autor)
+            var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (obra == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(obra);
+            return View(user);
         }
 
-        // POST: Obras/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var obra = await _context.Obras.FindAsync(id);
-            _context.Obras.Remove(obra);
+            var user = await _context.Users.FindAsync(id);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ObraExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Obras.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }
