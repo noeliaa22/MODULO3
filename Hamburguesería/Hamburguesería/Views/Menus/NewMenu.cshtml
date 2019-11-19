@@ -1,0 +1,100 @@
+﻿@model Hamburguesería.Models.Menu
+
+@{
+//ViewData["Title"] = "NewMenu";
+}
+
+<h1>Tu Menu</h1>
+
+
+<form asp-controller="Menus" asp-action="ConfirmarMenu">
+<div class="row">
+    @if (Model.Entrante!=null)
+    {
+    <div class="card col-lg-4 col-md-6 col-sm-12" style="width: 18rem; ">
+        <h3>ENTRANTE</h3>
+        <img src="@Model.Entrante.Imagen" class="card-img-top fotosProductos" alt="@Model.Entrante.Nombre">
+        <div class="card-body">
+            <h5 class="card-title productos">@Model.Entrante.Nombre</h5>
+            <p class="card-text productos">@Model.Entrante.Descripcion</p>
+        </div>
+        @*<ul class="list-group list-group-flush">
+                <li class="list-group-item productos">Ingredientes: @Model.Entrante.IngredientesPrincipales</li>
+            </ul>*@
+    </div>
+    <input type="hidden" value="@Model.Entrante.Id" asp-for="EntranteId" />
+    }
+
+    @if (Model.Principal!=null)
+    {
+    <div class="card col-lg-4 col-md-6 col-sm-12" style="width: 18rem; ">
+        <h3>PRINCIPAL</h3>
+        <img src="@Model.Principal.Imagen" class="card-img-top fotosProductos" alt="@Model.Principal.Nombre">
+        <div class="card-body">
+            <div class="form-check">
+                <h5 class="card-title productos">@Model.Principal.Nombre</h5>
+                <p class="card-text productos">@Model.Principal.Descripcion</p>
+            </div>
+            @*<ul class="list-group list-group-flush">
+                    <li class="list-group-item productos">Ingredientes: @Model.Principal.IngredientesPrincipales</li>
+                </ul>*@
+        </div>
+    </div>
+    <input type="hidden" value="@Model.Principal.Id" asp-for="PrincipalId" />
+    }
+
+    @if (Model.Postre!=null)
+    {
+    <div class="card col-lg-4 col-md-6 col-sm-12" style="width: 18rem; ">
+        <h3>POSTRE</h3>
+        <img src="@Model.Postre.Imagen" class="card-img-top fotosProductos" alt="@Model.Postre.Nombre">
+        <div class="card-body">
+            <h5 class="card-title productos">@Model.Postre.Nombre</h5>
+            <p class="card-text productos">@Model.Postre.Descripcion</p>
+        </div>
+        @*<ul class="list-group list-group-flush">
+                <li class="list-group-item productos">Ingredientes: @Model.Postre.IngredientesPrincipales</li>
+            </ul>*@
+    </div>
+    <input type="hidden" value="@Model.Postre.Id" asp-for="PostreId" />
+
+    }
+
+</div>
+
+<h4><br />Precio total: @Model.PrecioTotal €<br /></h4>
+
+    <input type="hidden" value="@Model.PrecioTotal" asp-for="PrecioTotal" />
+    <input type="hidden" value="@Model.Fecha" asp-for="Fecha" />
+
+    <input type="submit" value="Realizar pedido" />
+</form>
+
+
+<a asp-action="Index"> Modificar Menu </a>
+
+
+
+
+@*<div>
+        <h4>Menu</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Fecha)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Fecha)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PrecioTotal)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PrecioTotal)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>*@

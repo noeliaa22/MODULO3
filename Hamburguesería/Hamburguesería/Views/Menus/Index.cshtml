@@ -1,0 +1,125 @@
+﻿@model Hamburguesería.Models.ViewModels.CrearMenuVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Haz tu pedido</h1>
+<h5>Elige un entrante, una hamburguesa, un postre y completa tu menu</h5>
+
+
+<form asp-controller="Menus" asp-action="NewMenu">
+<h3>ENTRANTES</h3>
+    <div class="row">
+        @foreach (Entrante entrante in Model.Entrantes)
+        {
+
+            <div class="card col-lg-4 col-md-6 col-sm-12" style="width: 18rem; ">
+                <img src="@entrante.Imagen" class="card-img-top fotosProductos" alt="@entrante.Nombre">
+                <div class="card-body">
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="Menu.EntranteId" type="radio" id="exampleRadios1" value="@entrante.Id">
+                        <label class="form-check-label" asp-for="Menu.EntranteId" for="exampleRadios1">
+                            <h5 class="card-title productos">@entrante.Nombre</h5>
+                        </label>
+                    </div>
+                    <p class="card-text productos">@entrante.Descripcion</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item productos">Ingredientes: @entrante.IngredientesPrincipales</li>
+                </ul>
+            </div>
+        }
+    </div>
+
+
+
+    <h3>HAMBURGUESAS</h3>
+    <div class="row">
+        @foreach (Principal principal in Model.Principales)
+        {
+            <div class="card col-lg-4 col-md-6 col-sm-12" style="width: 18rem; ">
+                <img src="@principal.Imagen" class="card-img-top fotosProductos" alt="@principal.Nombre">
+                <div class="card-body">
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="Menu.PrincipalId" type="radio" id="exampleRadios1" value="@principal.Id">
+                        <label class="form-check-label"asp-for="Menu.PrincipalId" for="exampleRadios1">
+                            <h5 class="card-title productos">@principal.Nombre</h5>
+                        </label>
+                    </div>
+                    <p class="card-text productos">@principal.Descripcion</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item productos">Ingredientes: @principal.IngredientesPrincipales</li>
+                </ul>
+                @*<div class="card-body">
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>*@
+            </div>
+        }
+    </div>
+
+
+
+    <h3>POSTRES</h3>
+    <div class="row">
+        @foreach (Postre postre in Model.Postres)
+        {
+            <div class="card col-lg-4 col-md-6 col-sm-12" style="width: 18rem; ">
+                <img src="@postre.Imagen" class="card-img-top fotosProductos" alt="@postre.Nombre">
+                <div class="card-body">
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="Menu.PostreId" type="radio" id="exampleRadios1" value="@postre.Id">
+                        <label class="form-check-label" asp-for="Menu.PostreId" for="exampleRadios1">
+                            <h5 class="card-title productos">@postre.Nombre</h5>
+                        </label>
+                    </div>
+                    <p class="card-text productos">@postre.Descripcion</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item productos">Ingredientes: @postre.IngredientesPrincipales</li>
+                </ul>
+            </div>
+        }
+    </div>
+    <button type="submit" asp-action="NewMenu">Resumen Menu</button>
+</form>
+
+
+
+
+
+    @*<p>
+            <a asp-action="Create">Create New</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Fecha)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrecioTotal)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrecioTotal)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>*@
