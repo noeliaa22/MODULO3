@@ -1,4 +1,9 @@
 ﻿@model IEnumerable<EntityFramework.Models.Obra>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> _signInManager
+@inject UserManager<AppUser> _userManager
+
+
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +11,18 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (_signInManager.IsSignedIn(User))
+{
+    AppUser user = await _userManager.GetUserAsync(User); //generar el objeto usuario
+
+    <!--Para saber si el usuario logeado tiene el role de administrador-->
+    @if (await _userManager.IsInRoleAsync(user, "Admin") || await _userManager.IsInRoleAsync(user, "PremiumUser"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
 <table class="table">
     <thead>
         <tr>
@@ -31,34 +45,46 @@
         </tr>
     </thead>
     <tbody>
-@foreach (Obra obra in Model) {
-        <tr>
-            <td>
-                @obra.Titulo
-            </td>
-            <td>
-                @obra.AnioPublicacion
-            </td>
-            <td>
-                @obra.Autor.Nombre @obra.Autor.Apellido
-            </td>
-            <td>
-                <ul>
-                    @foreach (ObraCategoria obracategoria in obra.ObraCategorias)
+        @foreach (Obra obra in Model)
+        {
+            <tr>
+                <td>
+                    @obra.Titulo
+                </td>
+                <td>
+                    @obra.AnioPublicacion
+                </td>
+                <td>
+                    @obra.Autor.Nombre @obra.Autor.Apellido
+                </td>
+                <td>
+                    <ul>
+                        @foreach (ObraCategoria obracategoria in obra.ObraCategorias)
+                        {
+                            <li>@obracategoria.Categoria.Nombre</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <img class="imagenObra" src=" @obra.Imagen" />
+                </td>
+                <td>
+                    @if (_signInManager.IsSignedIn(User))
                     {
-                        <li>@obracategoria.Categoria.Nombre</li>
+                        AppUser user = await _userManager.GetUserAsync(User); //generar el objeto usuario
+
+                        <!--Para saber si el usuario logeado tiene el role de administrador-->
+                        @if (await _userManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@obra.Id">Edit |</a>
+                            <a asp-action="Delete" asp-route-id="@obra.Id"> Delete |</a>
+                        }
                     }
-                </ul>
-            </td>
-            <td>
-                <img class="imagenObra" src=" @obra.Imagen" />
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@obra.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@obra.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@obra.Id">Delete</a>
-            </td>
-        </tr>
-}
+
+                    <a asp-action="Details" asp-route-id="@obra.Id"> Details </a>
+                </td>
+
+            </tr>
+        }
     </tbody>
 </table>

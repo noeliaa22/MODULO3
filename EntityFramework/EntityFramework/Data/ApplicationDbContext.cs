@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using EntityFramework.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityFramework.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser,IdentityRole,string>
     {
         public DbSet<Autor> Autores { get; set; }
         public DbSet<Obra> Obras { get; set; }

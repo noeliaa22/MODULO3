@@ -8,12 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using EntityFramework.Data;
 using EntityFramework.Models;
 using EntityFramework.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EntityFramework.Controllers
 {
+    [Authorize] //Si no l indicas nada solo mira si es usuario está logeado
     public class ObrasController : Controller
     {
         private readonly ApplicationDbContext _context;
+        //private readonly SignInManager<IdentityUser> _signInManager;
+        //private readonly UserManager<IdentityUser> _userManager;
 
         public ObrasController(ApplicationDbContext context)
         {
@@ -23,13 +28,20 @@ namespace EntityFramework.Controllers
         // GET: Obras
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Obras.Include(o => o.Autor).Include(x=> x.ObraCategorias).ThenInclude(x=>x.Categoria);
+            //if (_signInManager.IsSignedIn(User))
+            //{
+            var applicationDbContext = _context.Obras.Include(o => o.Autor).Include(x => x.ObraCategorias).ThenInclude(x => x.Categoria);
             return View(await applicationDbContext.ToListAsync());
+            //}
+            //return NotFound();
         }
 
         // GET: Obras/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            //if (_signInManager.IsSignedIn(User))
+            //{
+
             if (id == null)
             {
                 return NotFound();
@@ -44,16 +56,30 @@ namespace EntityFramework.Controllers
             }
 
             return View(obra);
+
+            //}
+            //return NotFound();
         }
 
         // GET: Obras/Create
+        [Authorize(Roles = "PremiumUser, Admin")]
         public async Task<IActionResult> Create()
         {
+            //if (_signInManager.IsSignedIn(User))
+            //{
+            //    IdentityUser user = await _userManager.GetUserAsync(User);
+            //    if (await _userManager.IsInRoleAsync(user, "PremiumUser") || await _userManager.IsInRoleAsync(user, "Admin"))
+            //    {
+
             CrearObraVM covm = new CrearObraVM
             {
                 Autores = await _context.Autores.ToListAsync(),
-            }; 
+            };
             return View(covm);
+
+            //    }
+            //}
+            //return NotFound();
         }
 
         // POST: Obras/Create
@@ -74,8 +100,14 @@ namespace EntityFramework.Controllers
         }
 
         // GET: Obras/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
+            //if (_signInManager.IsSignedIn(User))
+            //{
+            //    IdentityUser user = await _userManager.GetUserAsync(User);
+            //    if (await _userManager.IsInRoleAsync(user, "Admin"))
+            //    {
             if (id == null)
             {
                 return NotFound();
@@ -88,7 +120,11 @@ namespace EntityFramework.Controllers
             }
             ViewData["AutorId"] = new SelectList(_context.Autores, "Id", "Id", obra.AutorId);
             return View(obra);
+            //    }
+            //}
+            //return NotFound();
         }
+
 
         // POST: Obras/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -127,8 +163,14 @@ namespace EntityFramework.Controllers
         }
 
         // GET: Obras/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
+            //if (_signInManager.IsSignedIn(User))
+            //{
+            //    IdentityUser user = await _userManager.GetUserAsync(User);
+            //    if (await _userManager.IsInRoleAsync(user, "Admin"))
+            //    {
             if (id == null)
             {
                 return NotFound();
@@ -143,6 +185,9 @@ namespace EntityFramework.Controllers
             }
 
             return View(obra);
+            //    }
+            //}
+            //return NotFound();
         }
 
         // POST: Obras/Delete/5
